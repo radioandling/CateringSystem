@@ -11,9 +11,6 @@ import staVipdetail from '../pages/statistics/staVipdetail.vue'
 const utils = require("../utils/utils")
 import ElementUI from 'element-ui'
 
-
-
-
 Vue.use(Router)
 
 export default new Router({

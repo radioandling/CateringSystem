@@ -1,5 +1,3 @@
-// The Vue build version to load with the `import` command
-// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './App'
 import router from './router'
@@ -13,6 +11,19 @@ import HighchartsMore from 'highcharts/highcharts-more';
 import HighchartsDrilldown from 'highcharts/modules/drilldown';
 import Highcharts3D from 'highcharts/highcharts-3d';
 import Highmaps from 'highcharts/modules/map';
+import tcb from 'tcb-js-sdk';
+// const tcb_app = tcb.init({
+//   env: 'radio528-1aaaf6'
+// });
+// const auth = tcb_app.auth();
+// async function login(){
+//   await auth.signInAnonymously();
+//   // 匿名登录成功检测登录状态isAnonymous字段为true
+//   const loginState = await auth.getLoginState();
+//   console.log(loginState.isAnonymous); // true
+// }
+// login()
+
 
 HighchartsMore(Highcharts)
 HighchartsDrilldown(Highcharts);

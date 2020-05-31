@@ -104,8 +104,8 @@ async function dbGetData(collectionName) {
 
 // 生成订单信息, 并添加到数据库中
 function createOrder(searchResult, goodsDetail) {
-  let that = this
   const tcb_app = tcbInit()
+  let that = this
   const total = caculateTotal(goodsDetail)
   let discount = typeof searchResult === "object" ? searchResult.vip_discount : 1
   let vip_phone = typeof searchResult === "object" ? searchResult.vip_phone : '无'

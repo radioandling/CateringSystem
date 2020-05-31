@@ -46,8 +46,8 @@ import VipSearch from "./vipSearch";
 import VipList from "./vipList";
 import VipInfo from "./vipInfo";
 import { mapState } from "vuex";
-const utils = require("../../utils/utils");
-const tcb_app = utils.tcbInit();
+const utils = require("../../utils/utils")
+const tcb_app = utils.tcbInit()
 export default {
   name: "Vip",
   components: {
@@ -116,15 +116,10 @@ export default {
     on_save_new_vip() {
       // 保存之前先验证三件事情： 1. 手机号码格式是否规范  2. 充值金额是不是大于300  3. vip是否已经存在
       // 先拿客户的手机号码去检查是否已经存在了, 存在就不添加，不存在就添加
-      var isFormatRight =
-        /^1[3456789]\d{9}$/.test(this.vip_info.vip_phone) &&
-        Number(this.vip_info.vip_balance) >= 500
-        console.log(/^1[3456789]\d{9}$/.test(this.vip_info.vip_phone))
-        console.log(typeof this.vip_info.vip_balance )
-      var isVipExsited =
-        this.vip_table_data.filter(item => {
-          return item.vip_phone === this.vip_info.vip_phone
-        }).length > 0
+      var isFormatRight =/^1[3456789]\d{9}$/.test(this.vip_info.vip_phone) &&Number(this.vip_info.vip_balance) >= 500
+      var isVipExsited = this.vip_table_data.filter(item => {
+        return item.vip_phone === this.vip_info.vip_phone
+      }).length > 0
       if (!isFormatRight) {
         this.$message({
           message: "格式不对",
@@ -203,7 +198,7 @@ export default {
             message: "添加成功，欢迎成为我店会员",
             duration: 1000,
             type: "success"
-          });
+          })
         }
       }
     }

@@ -13,6 +13,7 @@
 <script>
 const utils = require("../utils/utils");
 import { mapState } from "vuex";
+const tcb_app = utils.tcbInit()
 export default {
   data() {
     return {};
