@@ -126,7 +126,7 @@ export default {
         this.records_will_show = records
       })
     }
-  },
+  }
 
 }
 </script>

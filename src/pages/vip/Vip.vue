@@ -23,7 +23,7 @@
                 <el-input v-model="vip_info.vip_phone" autocomplete="off"></el-input>
               </el-form-item>
               <el-form-item label="充值金额">
-                <el-input placeholder="500起充" v-model="vip_info.vip_balance" autocomplete="off"></el-input>
+                <el-input placeholder="500起充" class="placeholderClass" v-model="vip_info.vip_balance" autocomplete="off"></el-input>
               </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -203,12 +203,17 @@ export default {
       }
     }
   }
-};
+}
 </script>
 
 <style scoped lang="less">
 .options-buttons /deep/ .el-button {
   width: 100px;
+}
+.placeholderClass /deep/ .el-input__inner::-webkit-input-placeholder{
+  color: red;
+  font-size: 14px;
+  opacity: .6;
 }
 // 自定义css
 .vip {

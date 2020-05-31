@@ -16,26 +16,36 @@
 
 <script>
 import { mapState } from 'vuex'
+import utils from '../../utils/utils'
 export default {
   data() {
     return {
       often_goods_data: []
     }
   },
-  computed: {
-    ...mapState({
-      goods_data: state => state.PosStore.goods_data
-    })
-  },
   methods: {
     add_to_orderList(choosedItem) {
       this.$store.commit('POS_ADD_TO_TABLE_LIST', choosedItem)
     }
   },
-  created(){
-    this.often_goods_data = this.goods_data.filter((item) => {
-      return item.goods_hot
-    })
+  mounted(){
+    var that = this
+    const tcb_app = tcb.init({
+      env: "radio528-1aaaf6"
+    });
+    const auth = tcb_app.auth()
+    async function login() {
+      await auth.signInAnonymously()
+      // 匿名登录成功检测登录状态isAnonymous字段为true
+      const loginState = await auth.getLoginState()
+      var db = tcb_app.database()
+      db.collection("CS_GOODS").limit(10000).get().then((res) => {
+        that.often_goods_data = res.data.filter((item) => {
+          return item.goods_hot
+        })
+      })
+    }
+    login()
   }
 }
 </script>

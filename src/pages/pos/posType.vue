@@ -6,7 +6,7 @@
           <ul class="cookList">
             <li v-for="item in coffee_goods" :key="item._Id" @click="add_to_orderList(item)">
               <div class="left-Img">
-                <img :src="item.goods_img"/>
+                <img :src="item.goods_img" />
               </div>
               <div class="right-text">
                 <span class="foodName">{{item.goods_name}}</span>
@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState } from "vuex";
 export default {
   data() {
     return {
@@ -68,45 +68,58 @@ export default {
       tea_goods: [],
       ice_goods: [],
       cake_goods: []
-    }
+    };
   },
   methods: {
     add_to_orderList(choosedItem) {
-      this.$store.commit('POS_ADD_TO_TABLE_LIST', choosedItem)
-    },
+      this.$store.commit("POS_ADD_TO_TABLE_LIST", choosedItem);
+    }
   },
   computed: {
     ...mapState({
-      goods_data: state => state.PosStore.goods_data,
       goods_table_data: state => state.PosStore.goods_table_data
     })
   },
-  created(){
-    this.coffee_goods = this.goods_data.filter((item) => {
-      return item.goods_type === 'coffee'
+  created() {
+    var that = this
+    const tcb_app = tcb.init({
+      env: "radio528-1aaaf6"
     })
-    this.tea_goods = this.goods_data.filter((item) => {
-      return item.goods_type === 'tea'
-    })
-    this.ice_goods = this.goods_data.filter((item) => {
-      return item.goods_type === 'ice'
-    })
-    this.cake_goods = this.goods_data.filter((item) => {
-      return item.goods_type === 'cake'
-    })
+    const auth = tcb_app.auth()
+    async function login() {
+      await auth.signInAnonymously()
+      // 匿名登录成功检测登录状态isAnonymous字段为true
+      const loginState = await auth.getLoginState()
+      var db = tcb_app.database()
+      db.collection("CS_GOODS").limit(10000).get().then(res => {
+        that.coffee_goods = res.data.filter(item => {
+          return item.goods_type === "coffee"
+        })
+        that.tea_goods = res.data.filter(item => {
+          return item.goods_type === "tea"
+        })
+        that.ice_goods = res.data.filter(item => {
+          return item.goods_type === "ice"
+        })
+        that.cake_goods = res.data.filter(item => {
+          return item.goods_type === "cake"
+        })
+      })
+    }
+    login()
   }
 }
 </script>
 
 <style scoped lang="less">
-.goods-type /deep/ .el-tabs__item{
+.goods-type /deep/ .el-tabs__item {
   font-size: 16px;
 }
 .goods-type {
   margin-top: 40px;
   padding: 0 10px;
   box-sizing: border-box;
-  .cookList{
+  .cookList {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -121,21 +134,21 @@ export default {
       display: flex;
       flex-direction: row;
       justify-content: flex-start;
-      box-shadow: 2px 2px 5px rgba(0, 0, 0, .1);
-      transition: all .3s;
-      &:hover{
+      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s;
+      &:hover {
         transform: scale(1.05);
       }
       .left-Img {
         width: 40%;
         height: 100%;
-        img{
+        img {
           display: inline-block;
           width: 100%;
           height: 100%;
         }
       }
-      .right-text{
+      .right-text {
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -152,8 +165,6 @@ export default {
           box-sizing: border-box;
         }
       }
-      
-      
     }
   }
 }
