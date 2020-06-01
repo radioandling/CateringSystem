@@ -41,7 +41,7 @@
           </div>
           <div class="detail-item">
             <span>会员结账：</span>
-            <span>{{sta_sale_will_show.or_is_vip ? '是' :  '否'}}</span>
+            <span>{{sta_sale_will_show.or_is_vip ? '是' : '否'}}</span>
           </div>
           <div class="detail-item">
             <span>会员账号：</span>
@@ -54,9 +54,35 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-import HighCharts from "../../commonComponents/highCharts";
-const utils = require("../../utils/utils");
+import { mapState } from "vuex"
+import HighCharts from "../../commonComponents/highCharts"
+const utils = require("../../utils/utils")
+// 更新表格的函数
+function updateChartData(data) {
+  const daysList = [];
+  const month =
+    new Date().getMonth() + 1 >= 10
+      ? new Date().getMonth() + 1
+      : "0" + (new Date().getMonth() + 1);
+  for (let i = 1; i < 32; i++) {
+    // 拼接每一天的日期
+    let j = i >= 10 ? i : "0" + i;
+    let date = `2020年${month}月${j}日`;
+    // 每天的销售明细
+    var daySale = data.filter(item => {
+      return item.or_time.slice(0, 11) === date;
+    })
+    // 把每天的销售明细的销售额求和
+    let dayMoney = 0;
+    if (daySale.length > 0) {
+      for (let k = 0; k < daySale.length; k++) {
+        dayMoney = dayMoney + daySale[k].or_price_after_discount;
+      }
+    }
+    daysList.push(dayMoney);
+  }
+  return daysList;
+}
 export default {
   components: {
     HighCharts
@@ -68,7 +94,7 @@ export default {
           type: "line"
         },
         title: {
-          text: '月销售量',
+          text: "月销售量",
           style: {
             color: "#3E576F",
             align: "center",
@@ -76,23 +102,55 @@ export default {
           }
         },
         subtitle: {
-          text: 'Source: radio.com'  
+          text: "Source: radio.com"
         },
-        xAxis:{
+        xAxis: {
           labels: {
             padding: 1,
             maxStaggerLines: 31
           },
-          categories: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31],
+          categories: [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31
+          ],
           crosshair: true
         },
         yAxis: {
           min: 0,
           title: {
-            text: '销售额 (元)'         
-          },
+            text: "销售额 (元)"
+          }
         },
-        series: [{data: []}]
+        series: [{ data: [] }]
       }
     };
   },
@@ -105,66 +163,25 @@ export default {
   methods: {
     on_show_detail(row) {
       this.$store.commit("UPDATE_STA_SALE_WILL_SHOW", row);
-    },
-    updateChartData(){
-      const daysList = []
-      let saleData = this.sta_sale_data
-      const month = ((new Date()).getMonth() + 1) >= 10 ? (new Date()).getMonth() : '0' + ((new Date()).getMonth() + 1)
-      for (let i = 1; i < 32; i++) {
-        // 拼接每一天的日期
-        const date = `2020年${month}月${i}日`
-        // 每天的销售明细
-        var daySale = saleData.filter((item) => {
-          return item.or_time.slice(0,11) === date
-        })
-        // 把每天的销售明细的销售额求和
-        let dayMoney = 0
-        if (daySale.length > 0) {
-          for (let k = 0; k < daySale.length; k++) {
-            dayMoney = dayMoney + daySale[k].or_price_after_discount
-          }
-        }
-        daysList.push(dayMoney)
-      }
-      this.chart_options.series[0].data = daysList
     }
   },
   watch: {
-    sta_sale_data:{
-      handler: function(newVal){
-        console.log('数据更新了')
-        const daysList = []
-        const month = ((new Date()).getMonth() + 1) >= 10 ? (new Date()).getMonth() : '0' + ((new Date()).getMonth() + 1)
-        for (let i = 1; i < 32; i++) {
-          // 拼接每一天的日期
-          const date = `2020年${month}月${i}日`
-          // 每天的销售明细
-          var daySale = newVal.filter((item) => {
-            return item.or_time.slice(0,11) === date
-          })
-          // 把每天的销售明细的销售额求和
-          let dayMoney = 0
-          if (daySale.length > 0) {
-            for (let k = 0; k < daySale.length; k++) {
-              dayMoney = dayMoney + daySale[k].or_price_after_discount
-            }
-          }
-          daysList.push(dayMoney)
-        }
-        this.chart_options.series[0].data = daysList
+    sta_sale_data: {
+      handler: function(){
+        this.chart_options.series[0].data = updateChartData(this.sta_sale_data)
       },
       deep: true
     }
   },
-  created(){
-    this.updateChartData()
+  created() {
+    this.chart_options.series[0].data = updateChartData(this.sta_sale_data)
   }
-}
+};
 </script>
 
 <style scoped lang="less">
-.detail-table{
-  border-radius: .6rem;
+.detail-table {
+  border-radius: 0.6rem;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
 }
 .show-detail {
@@ -177,7 +194,7 @@ export default {
   border-radius: 5px;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
   .detail-item {
-    padding: .5rem 0;
+    padding: 0.5rem 0;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;

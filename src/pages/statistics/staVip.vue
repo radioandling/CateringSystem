@@ -90,23 +90,19 @@ export default {
     }
   },
   mounted(){
-    // 把数据放入到store里面去
-    utils.dbGetData("CS_VIP").then(res => {
-      const data = res.data
-      this.$store.commit("INIT_VIP_TABLE_DATA", data)
-      this.$store.commit("UPDATE_VIP_WILL_SHOW", data[0])
-      this.total_vip_amount = data.length // 初始化总会员数
-      this.total_vip_balance = data.reduce((prev, curr) => {
+    // 从store里面获取数据，然后再进行处理
+    let vipData = this.vip_table_data
+    this.total_vip_amount = vipData.length // 初始化总会员数
+      this.total_vip_balance = vipData.reduce((prev, curr) => {
         return prev + curr.vip_balance
       }, 0) // 初始化总会员余额
       // 初始化日汇总数据
       let formatDay = utils.getSimTime()
-      let dayOrders = data.filter((item) => {
+      let dayOrders = vipData.filter((item) => {
         let dealedTime = item.vip_start.split(' ')[0]
         return dealedTime === formatDay
       })
       this.caculate_sum = dayOrders.length
-    }) 
   }
   
 };

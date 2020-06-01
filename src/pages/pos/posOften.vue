@@ -30,22 +30,30 @@ export default {
   },
   mounted(){
     var that = this
-    const tcb_app = tcb.init({
-      env: "radio528-1aaaf6"
-    });
-    const auth = tcb_app.auth()
-    async function login() {
-      await auth.signInAnonymously()
-      // 匿名登录成功检测登录状态isAnonymous字段为true
-      const loginState = await auth.getLoginState()
-      var db = tcb_app.database()
-      db.collection("CS_GOODS").limit(10000).get().then((res) => {
-        that.often_goods_data = res.data.filter((item) => {
+    var goods_data = JSON.parse(localStorage.getItem('goods_data'))
+    if (goods_data) {
+      that.often_goods_data = goods_data.filter((item) => {
           return item.goods_hot
         })
-      })
+    } else {
+      const tcb_app = tcb.init({
+        env: "radio528-1aaaf6"
+        });
+      const auth = tcb_app.auth()
+      async function login() {
+        await auth.signInAnonymously()
+        // 匿名登录成功检测登录状态isAnonymous字段为true
+        const loginState = await auth.getLoginState()
+        var db = tcb_app.database()
+        db.collection("CS_GOODS").limit(10000).get().then((res) => {
+          that.often_goods_data = res.data.filter((item) => {
+            return item.goods_hot
+          })
+        })
+      }
+      login()
     }
-    login()
+    
   }
 }
 </script>

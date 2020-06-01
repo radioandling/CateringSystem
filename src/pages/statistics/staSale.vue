@@ -101,22 +101,16 @@ export default {
     }
   },
   mounted(){
-    utils.dbGetData("CS_ORDERS").then(res => {
-      // 把拿到的数据放入store里面，方便其他组件使用
-      this.$store.commit("UPDATE_STA_SALE_DATA", res.data)
-      this.$store.commit("UPDATE_STA_SALE_WILL_SHOW", res.data[0])
-      // 初始化数据
-      let formatDay = utils.getSimTime()
-      const data = this.sta_sale_data
-      let dayOrders = data.filter((item) => {
-        let dealedTime = item.or_time.split(' ')[0]
-        return dealedTime === formatDay
-      })
-      const sum = dayOrders.reduce((prev, curr) => {
-        return prev + curr.or_price_after_discount
-      }, 0)
-      this.caculate_sum = sum
+    const data = this.sta_sale_data
+    let formatDay = utils.getSimTime()
+    let dayOrders = data.filter((item) => {
+      let dealedTime = item.or_time.split(' ')[0]
+      return dealedTime === formatDay
     })
+    const sum = dayOrders.reduce((prev, curr) => {
+      return prev + curr.or_price_after_discount
+    }, 0)
+    this.caculate_sum = sum
   }
 }
 </script>

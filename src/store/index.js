@@ -11,6 +11,7 @@ const PosStore = {
     handup_table_items: [], // 存放挂起的每一条信息
   }),
   mutations: {
+    // 更新全部的商品库存信息
     POS_INIT_GOODS_DATA(state, data){
       state.goods_data = data
       state.goods_data.sort(function(a,b){
@@ -131,9 +132,6 @@ const StaStore = {
     UPDATE_STA_SALE_WILL_SHOW(state, order){
       state.sta_sale_will_show = order
     },
-    // UPDATE_STA_STORAGE_DATA(state, data){
-    //   state.goods_data = data
-    // },
     UPDATE_STA_STORAGE_WILL_SHOW(state, storage){
       state.sta_storage_will_show = storage
     },

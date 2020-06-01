@@ -23,7 +23,6 @@ import StaSale from "./staSale"
 import StaSaledetail from "./staSaledetail"
 import StaStoragedetail from "./staStoragedetail"
 import StaVipdetail from "./staVipdetail"
-import { mapState } from "vuex"
 
 export default {
   components: {

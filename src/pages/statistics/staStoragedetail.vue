@@ -31,7 +31,11 @@
           </div>
           <div class="detail-item">
             <span>库存数量：</span>
-            <span>{{sta_storage_will_show.goods_amount}}</span>
+            <span 
+              :id="(sta_storage_will_show.goods_amount < 10) ? 'low-number' : ''"
+            >
+              {{sta_storage_will_show.goods_amount}}
+            </span>
           </div>
         </div>
       </el-col>
@@ -47,7 +51,7 @@ export default {
   },
   computed: {
     ...mapState({
-       goods_data: state => state.PosStore.goods_data,
+      goods_data: state => state.PosStore.goods_data,
       sta_storage_will_show: state => state.StaStore.sta_storage_will_show,
     })
   },
@@ -60,6 +64,9 @@ export default {
 </script>
 
 <style scoped lang="less">
+#low-number{
+  color: #e64340;
+}
 .show-detail{
   height: 300px;
   padding: 20px;
@@ -90,4 +97,5 @@ export default {
     }
   }
 }
+
 </style>

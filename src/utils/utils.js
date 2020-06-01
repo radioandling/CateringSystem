@@ -89,7 +89,7 @@ function updateStorageNumber(id, amount){
   }).then(() => {
     // 减掉库存之后更新库存数量
     dbGetData('CS_GOODS').then((res) => {
-      this.$store.commit('UPDATE_STA_SALE_DATA', res.data)
+      this.$store.commit('POS_INIT_GOODS_DATA', res.data)
     })
   })
 }
@@ -127,9 +127,7 @@ function createOrder(searchResult, goodsDetail) {
     }
   }).then(function(){
     dbGetData('CS_ORDERS').then(function(res){
-      that.$store.commit('POS_INIT_GOODS_DATA', res.data)
       that.$store.commit('UPDATE_STA_SALE_DATA', res.data)
-
     })
   })
 }
@@ -243,6 +241,10 @@ function checkOut(orderData, vipData, index) {
                 instance.confirmButtonLoading = true
                 instance.confirmButtonText = "结账中..."
                 setTimeout(() => {
+                  // 5.减去库存的量
+                  orderList.forEach(function(item){
+                    updateStorageNumber.call(that, item._id, item.goods_count)
+                  })
                   done()
                   setTimeout(() => {
                     instance.confirmButtonLoading = false
@@ -316,6 +318,10 @@ function checkOut(orderData, vipData, index) {
                     instance.confirmButtonLoading = false
                     // 删除掉菜单表上的商品
                     typeof index === 'undefined' ? that.$store.commit("POS_REMOVEALLGOODS") : that.$store.commit('POS_REMOVE_HANDUP_TABLE_ITEM', index)
+                    // 减掉库存商品数量
+                    orderList.forEach(function(item){
+                      updateStorageNumber.call(that, item._id, item.goods_count)
+                    })
                   }, 500)
                 }, 1000)
               } else {
@@ -335,10 +341,7 @@ function checkOut(orderData, vipData, index) {
             } 
           })
         }
-        // 5.减去库存的量
-        orderList.forEach(function(item){
-          updateStorageNumber.call(that, item._id, item.goods_count)
-        })
+        
       })
       .catch((err) => {
         console.log(err)

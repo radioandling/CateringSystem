@@ -81,34 +81,41 @@ export default {
     })
   },
   created() {
-    var that = this
-    const tcb_app = tcb.init({
-      env: "radio528-1aaaf6"
-    })
-    const auth = tcb_app.auth()
-    async function login() {
-      await auth.signInAnonymously()
-      // 匿名登录成功检测登录状态isAnonymous字段为true
-      const loginState = await auth.getLoginState()
-      var db = tcb_app.database()
-      db.collection("CS_GOODS").limit(10000).get().then(res => {
-        that.coffee_goods = res.data.filter(item => {
-          return item.goods_type === "coffee"
-        })
-        that.tea_goods = res.data.filter(item => {
-          return item.goods_type === "tea"
-        })
-        that.ice_goods = res.data.filter(item => {
-          return item.goods_type === "ice"
-        })
-        that.cake_goods = res.data.filter(item => {
-          return item.goods_type === "cake"
-        })
-      })
+    var that = this;
+    var goods_data = JSON.parse(localStorage.getItem("goods_data"));
+    // 第一次打开网页，从去云开发数据库获取数据，后面localStorage里面就有数据了，就直接取数据就行
+    function InitTypeData(data) {
+      that.coffee_goods = data.filter(item => {
+        return item.goods_type === "coffee";
+      });
+      that.tea_goods = data.filter(item => {
+        return item.goods_type === "tea";
+      });
+      that.ice_goods = data.filter(item => {
+        return item.goods_type === "ice";
+      });
+      that.cake_goods = data.filter(item => {
+        return item.goods_type === "cake";
+      });
     }
-    login()
+    if (goods_data) {
+      InitTypeData(goods_data)
+    } else {
+      const tcb_app = tcb.init({
+        env: "radio528-1aaaf6"
+      });
+      const auth = tcb_app.auth();
+      async function login() {
+        await auth.signInAnonymously();
+        // 匿名登录成功检测登录状态isAnonymous字段为true
+        const loginState = await auth.getLoginState();
+        var db = tcb_app.database();
+        db.collection("CS_GOODS").limit(10000).get().then(res => {InitTypeData(res.data)})
+      }
+      login();
+    }
   }
-}
+};
 </script>
 
 <style scoped lang="less">

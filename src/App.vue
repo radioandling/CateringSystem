@@ -28,12 +28,22 @@ export default {
       // 匿名登录成功检测登录状态isAnonymous字段为true
       const loginState = await auth.getLoginState()
       var db = tcb_app.database()
+      // 获取到商品信息，放到localStorage里面去
       db.collection("CS_GOODS").limit(10000).get().then((res) => {
         that.$store.commit("POS_INIT_GOODS_DATA", res.data)
+        localStorage.setItem('goods_data', JSON.stringify(res.data))
       })
+      // 获取到会员信息，放到localStorage里面去
       db.collection("CS_VIP").limit(10000).get().then((res) => {
         that.$store.commit("INIT_VIP_TABLE_DATA", res.data)
         that.$store.commit("UPDATE_VIP_WILL_SHOW", res.data[0])
+        localStorage.setItem('vip_data', JSON.stringify(res.data))
+      })
+      // 获取到订单信息，放到localStorage里面去
+      db.collection('CS_ORDERS').limit(10000).get().then((res) => {
+        that.$store.commit("UPDATE_STA_SALE_DATA", res.data)
+        that.$store.commit("UPDATE_STA_SALE_WILL_SHOW", res.data[0])
+        localStorage.setItem('sale_data', JSON.stringify(res.data))
       })
     }
     login()

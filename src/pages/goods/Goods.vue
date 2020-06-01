@@ -70,7 +70,6 @@
   </div>
 </template>
 
-
 <script>
 const utils = require('../../utils/utils')
 const tcb_app = utils.tcbInit()
@@ -124,31 +123,28 @@ export default {
     },
     on_update_goods(item) {
       // 在防抖的基础上做了一个前摇：1秒内多次点击保存圆钮的时候，只发送一次请求
-      const _this = this
+      const that = this
       let timer = null
-      if (_this.okNext) {
-        _this.okNext = false
+      if (that.okNext) {
+        that.okNext = false
         update_goods(item)
       }
       clearTimeout(timer)
       timer = setTimeout(() => {
-        _this.okNext = true
+        that.okNext = true
       }, 2000)
       // 更新商品数量以及价格
       function update_goods(item){ 
-        _this.changing_item.id = item._id
-        tcb_app
-          .callFunction({
-            name: "updateCSGOODS",
-            data:  _this.changing_item
+        that.changing_item.id = item._id
+        tcb_app.callFunction({
+          name: "updateCSGOODS",
+          data:  that.changing_item
+        }).then(() => {
+          utils.dbGetData('CS_GOODS').then(({data}) => {
+            that.$store.commit('POS_INIT_GOODS_DATA', data)
           })
-          .then(() => {
-            utils.dbGetData('CS_GOODS').then(({data}) => {
-               _this.$store.commit('POS_INIT_GOODS_DATA', data)
-            })
-            _this.change_item_index = undefined
-          })
-          .catch(err => {console.log(err)})
+          that.change_item_index = undefined
+        }).catch(err => {console.log(err)})
       } 
     },
     on_remove_goods(item) {
@@ -162,7 +158,6 @@ export default {
   }
 }
 </script>
-
 
 <style scoped lang="less">
 .right-bottom /deep/ .el-button--primary{

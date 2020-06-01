@@ -26,18 +26,20 @@ export default {
       total_amount: 0
     }
   },
+  computed: {
+    ...mapState({
+      goods_data: state => state.PosStore.goods_data,
+    })
+  },
   methods: {
   },
   mounted(){
-    utils.dbGetData('CS_GOODS').then(({data}) => {
-      this.$store.commit('POS_INIT_GOODS_DATA', data)
-      this.$store.commit('UPDATE_STA_STORAGE_WILL_SHOW', data[0])
-      // 初始化汇总数据
-      this.total_sum = data.reduce((prev, curr) => {
-        return prev + curr.goods_cost * curr.goods_amount
-      }, 0)
-      this.total_amount = data.length
-    })
+    let goodsData = this.goods_data
+    // 初始化汇总数据
+    this.total_sum = goodsData.reduce((prev, curr) => {
+      return prev + curr.goods_cost * curr.goods_amount
+    }, 0)
+    this.total_amount = goodsData.length
   }
 };
 </script>

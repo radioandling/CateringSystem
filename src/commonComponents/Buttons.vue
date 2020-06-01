@@ -29,17 +29,17 @@ export default {
   },
   methods: {
     on_checkout() {
-      var that = this;
+      var that = this
       // 检查库存的函数
       function checkNumber(num) {
-        const totalData = that.goods_data;
-        const tableData = that.goods_table_data;
+        const totalData = that.goods_data
+        const tableData = that.goods_table_data
         var checkResult = tableData.every(curVal => {
-          var totalCur = totalData.filter(item => {
-            return item._id === curVal._id;
-          })[0];
-          return totalCur.goods_amount - curVal.goods_count > num;
-        });
+          var totalCur = totalData.filter(item => {          
+            return item.goods_name === curVal.goods_name
+          })[0]
+          return totalCur.goods_amount - curVal.goods_count > num
+        })
         return checkResult;
       }
       if (that.goods_table_data.length > 0) {
@@ -214,7 +214,7 @@ export default {
       }
     }
   }
-};
+}
 </script>
 <style scoped lang="less">
 .buttons /deep/ .el-button {

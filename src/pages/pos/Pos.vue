@@ -34,8 +34,6 @@ export default {
       cake_goods: [],
     }
   },
-  computed: {},
-  methods: {},
   mounted() {
     // 给左边部分设置高度
     var orderHeight = document.body.clientHeight
