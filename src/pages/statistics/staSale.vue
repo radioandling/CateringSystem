@@ -1,7 +1,14 @@
 <template>
   <div>
     <div class="sale">
-      <button class="sale-button" v-for="(item, index) in button_text" :key="index" @click="on_change_time_circle" v-show="show_number === index">{{item}}</button>
+      <button
+        class="sale-button"
+        v-for="(item, index) in button_text" 
+        :key="index" 
+        @click="on_change_time_circle" v-show="show_number === index"
+      >
+        {{item}}
+      </button>
       <div class="sale-title">
         <i class="icon iconfont icon-xiaoliang1"></i>销量
       </div>
@@ -98,6 +105,7 @@ export default {
       this.show_number =  this.show_number < 2 ?  this.show_number + 1 : 0
       // 2.根据index的数值，改变统计金额
       this.caculate_sum = this.caculateSumByIndex(this.show_number)
+      this.$store.commit('UPDATE_STA_SHOW_INDEX', this.show_number)
     }
   },
   mounted(){

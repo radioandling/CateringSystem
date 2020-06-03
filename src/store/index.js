@@ -122,7 +122,8 @@ const StaStore = {
   state: () => ({
     sta_sale_data: [], // 存放所有的订单信息
     sta_sale_will_show: {}, // 存放正在展示的订单信息
-    sta_storage_will_show: {}, // 存放要正在展示的库存商品
+    sta_storage_will_show: {}, // 存放要正在展示的库存商品，
+    sta_show_sale_index: 0
   }),
   mutations: {
     // STA的mutation
@@ -135,6 +136,11 @@ const StaStore = {
     UPDATE_STA_STORAGE_WILL_SHOW(state, storage){
       state.sta_storage_will_show = storage
     },
+    UPDATE_STA_SHOW_INDEX(state, index){
+      console.log(index)
+      state.sta_show_sale_index = index
+    }
+
   }
 }
 
